@@ -1,6 +1,7 @@
 # MPhys-CVR-PINN
 
-MPhys project code for simulation-based evaluation of cerebrovascular reactivity (CVR) mapping in BOLD MRI using physics-informed neural networks (PINNs).
+MPhys project code for simulation-based evaluation of cerebrovascular reactivity (CVR) mapping in BOLD MRI using physics-informed neural networks (PINNs). The thesis is available: [MPhys_project_thesis.pdf](https://github.com/user-attachments/files/26659896/A_Template_for_MPhys_Project_Reports-2.pdf)
+
 
 This repository contains research scripts for:
 
