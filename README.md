@@ -14,41 +14,45 @@ This repository contains research scripts for:
 
 The codebase is organised around a workflow that starts with anatomical and ROI preparation, builds simulated or processed BOLD inputs, and then compares PINN-based CVR estimation against more conventional analysis pipelines.
 
-This is a script-based research repository rather than a packaged Python library. Several scripts still contain machine-specific default paths, so it is a good idea to review command-line arguments before running anything on a new system.
+This is a script-based research repository rather than a packaged Python library. Several scripts still contain user's machine specific default paths, so it is a good idea to review command-line arguments before running anything on a new system.
+
+[DataProcessPipeline.pdf](https://github.com/user-attachments/files/26659541/DataProcessPipeline.pdf)
+
+
+[simulation_pipeline.pdf](https://github.com/user-attachments/files/26659481/simulation_pipeline.pdf)
+
 
 ## Main Script Groups
 
 ### Simulation and Synthetic Data
 
-- `sim_ode.py`: chunked dynamic BOLD simulator using high-resolution CVR maps, delay maps, ROI masks, and ROI-specific baseline signal values
-- `tissue_baseline.py`: generates lower-resolution baseline/simulation inputs from high-resolution CVR magnitude and delay maps
-- `simwithsmooth.py`, `newsimbold.py`, `sim_ode.py`: simulation experiments with smoothing, tCNR control, and BOLD synthesis
-- `cvr_from_pdf.py`, `make_pdf.py`, `mida_maps_pdf.py`: create ROI-level distributions and sampled CVR/delay inputs
+- `sim_ode.py`: chunked dynamic  ODE BOLD simulator using high-resolution CVR magnitude maps, delay maps, ROI masks, and ROI-specific baseline signal values
+- `tissue_baseline.py`: generates low-resolution baseline inputs from high-resolution CVR magnitude and delay maps
+- `simwithsmooth.py`: simulation experiments with smoothing, tCNR control, and BOLD synthesis
+- `cvr_from_pdf.py`, `make_pdf.py`, `mida_maps_pdf.py`: create ROI-specific distributions and sampled CVR magnitude/delay inputs
 
 ### PINN Training and Adaptation
 
-- `pinnmodel.py`: trains a voxelwise PINN on simulated BOLD data and evaluates CVR magnitude and delay predictions
-- `submodel.py`: adapts pretrained PINN checkpoints to unseen BOLD images, including support for external EtCO2 traces
-- `pinn_40_ssh.py`, `pinn_60.py`, `submodel.py`: related PINN training/adaptation workflows
-- `vsGT.py`, `BA.py`: comparison and agreement analysis against ground truth or baseline methods
+- `pinnmodel.py`: trains a voxelwise PINN on simulated BOLD data and evaluates CVR magnitude and delay predictions using supervised learning
+- `pinn_60.py`, `pinn_40_ssh.py`: PINN training on 60 simulated images and adaptation on 40 unseen simulated images
+- `vsGT.py`, `BA.py`: comparison and agreement analysis against ground truth 
 
 ### GLM and Conventional CVR Mapping
 
-- `run_glm.py`: batch CVR GLM over simulated BOLD NIfTI data with variable delay handling
+- `run_glm.py`: batch CVR GLM over simulated BOLD NIfTI data
 - `fast_glm.py`: fast GLM pipeline for CVR magnitude and delay estimation
-- `cvr_map.py`: earlier script for voxelwise CVR/delay calculation from BOLD, masks, and EtCO2 traces
+- `cvr_map.py`: earlier script for voxelwise CVR/delay calculation from BOLD, masks, and EtCO2 traces (used during data processing)
 
 ### ROI, Segmentation, and BIDS Utilities
 
-- `fastsurfer_out.py`: wrapper around FastSurfer processing
 - `fastsurfer_seg.py`: derives WM, subcortical GM, cortical GM, and vCSF masks from FastSurfer outputs
-- `T12bold_bids.py`: registers T1-space segmentations into BOLD space
-- `vesselseg_bids.py`, `segmask2bold_bids.py`, `roierosion_bids.py`, `roidist_bids.py`, `roijson_bids.py`: ROI preparation and configuration helpers
+- `T12bold_bids.py`: registers T1-space segmentations into BOLD space (data processing)
+- `vesselseg_bids.py`, `segmask2bold_bids.py`, `roierosion_bids.py`, `roidist_bids.py`, `roijson_bids.py`: ROI preparation and configuration scripts (data processing)
 
 ### QC and Distribution Analysis
 
-- `hv_dist_mat.py`: extracts pooled ROI-wise CVR magnitude and delay distributions from BIDS-organised datasets
-- `kde_plot.py`, `tcnr_ratio.py`, `gastraces.py`: visualisation and QC utilities
+- `hv_dist_mat.py`: extracts pooled ROI-wise CVR magnitude and delay distributions from BIDS datasets
+- `kde_plot.py`, `tcnr_ratio.py`, `gastraces.py`: visualisation and quality check 
 
 ## Expected Inputs
 
@@ -71,8 +75,9 @@ pip install numpy scipy pandas matplotlib nibabel nilearn nipype scikit-image sc
 
 Some scripts also depend on external neuroimaging tools:
 
-- FastSurfer for segmentation outputs used by `fastsurfer_out.py` and `fastsurfer_seg.py`
 - FSL/FLIRT for registration workflows such as `T12bold_bids.py`
+
+FastSurfer was used on command line.
 
 ## Typical Workflow
 
@@ -93,7 +98,7 @@ python sim_ode.py \
   --delay path/to/CVR_delay_mida.nii.gz \
   --s0-json path/to/s0_by_roi.json \
   --out-root outputs/simulated \
-  --n-reps 3 \
+  --n-reps 100 \
   --tcnr-list 5.0,10.0
 ```
 
