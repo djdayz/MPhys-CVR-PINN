@@ -52,6 +52,7 @@ This is a script-based research repository rather than a packaged Python library
 - `run_glm.py`: batch CVR GLM over simulated BOLD NIfTI data with variable delay handling
 - `fast_glm.py`: fast GLM pipeline for CVR magnitude and delay estimation
 - `cvr_map.py`: earlier script for voxelwise CVR/delay calculation from BOLD, masks, and EtCO2 traces
+- `ETCO2.py`: compute ETCO2 and plot the CO2 gas trace and ETCO2.
 
 ### ROI, Segmentation, and BIDS Utilities
 
@@ -63,6 +64,7 @@ This is a script-based research repository rather than a packaged Python library
 
 - `hv_dist_mat.py`: extracts pooled ROI-wise CVR magnitude and delay distributions from BIDS-organised datasets
 - `kde_plot.py`, `tcnr_ratio.py`, `gastraces.py`: visualisation and QC utilities
+- `voxelwise_vs_etco2.py`: visual check of the BOLD signal and ETCO2 trace correlation using global shift
 
 ## Expected Inputs
 
